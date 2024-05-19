@@ -66,7 +66,12 @@ VALUES
 (18, NULL, 2, 32, 3, 80000, TRUE, 0.6, '2022-03-03 10:15'),
 (19, 2, 1, 10, 1, 80000, TRUE, 0.6, '2022-03-03 10:15'),
 (20, 1, 1, 10, 1, 80000, TRUE, 0.6, '2022-03-03 11:36'),
-(20, 1, 1, 10, 1, 80000, TRUE, 0.6, '2022-03-03 11:39');
+(20, 1, 1, 10, 1, 80000, TRUE, 0.6, '2022-03-03 11:39'),
+(1, 2, 3, 32, 2, 80000, TRUE, 0.2, '2022-03-03 15:36'),
+(21, NULL, 2, 32, 3, 90000, TRUE, 0.2, '2022-03-06 07:35'),
+(21, NULL, 2, 32, 3, 90000, FALSE, 0.0, '2022-03-06 07:36'),
+(22, 2, 2, 32, 1, 90000, FALSE, 0.0, '2022-03-06 09:50'),
+(23, 2, 2, 32, 1, 90000, TRUE, 0.2, '2022-03-06 15:36');
 
 
 -- Esto es un comentario
@@ -80,12 +85,12 @@ VALUES
 `Aplica_Descuento`, --7
 `Valor_Descuento`, --8
 `Fecha_Compra`) --9
-*/
+
 
 INSERT INTO tiquete
 (`Viajero_ID`, `Taquillero_ID`, `Viaje_ID`, `Ruta_ID`, `Metodo_Pago_ID`, `Valor_Tiquete`, `Aplica_Descuento`, `Valor_Descuento`, `Fecha_Compra`)
 VALUES
-
+*/
 
 
 SELECT v.`Viaje_ID`, b.`Capacidad_Pasajeros`, COUNT(t.`Compra_ID`) AS cantidad_pasajeros FROM viajes v INNER JOIN tiquete t ON t.`Viaje_ID` = v.`Viaje_ID`

@@ -69,21 +69,18 @@ BEGIN
 	    );
 END;
 
--- Trigger que evita insertar registros en la tabla tiquete en caso de algún error, por ejemplo, si al ingresar un registro que no aplica descuento
-CREATE TRIGGER valor_descuento BEFORE INSERT ON tiquete 
-FOR EACH ROW 
-BEGIN 
-DECLARE
-	Porcentaje_Descuento FLOAT;
-DECLARE
-	Aplica_Descuento BOOLEAN;
+-- Trigger que actualiza registros en la tabla tiquete en caso de algún error, por ejemplo, si al ingresar un registro que no aplica descuento y se asigna un valor incorrecto, automaticamente el trigger actualizará el valor a 0.0 en Valor_Descuento
+CREATE TRIGGER descuentos_inconsistentes BEFORE INSERT ON tiquete FOR EACH ROW
+BEGIN
+	DECLARE Porcentaje_Descuento FLOAT;
+	DECLARE Aplica_Descuento BOOLEAN;
+
 	SET Porcentaje_Descuento = NEW.Valor_Descuento;
 	SET Aplica_Descuento = NEW.Aplica_Descuento;
-	IF Aplica_Descuento = FALSE THEN SIGNAL SQLSTATE '45000'
-	SET
-	    MESSAGE_TEXT = 'No hay descuento';
-END
-	IF;
+
+	IF Aplica_Descuento = FALSE THEN
+		SET NEW.Valor_Descuento = 0;
+	END IF;
 END;
 
 -- Trigger que cambia el estado de viaje a finalizado cuando se inserta un viaje en la tabla de llegadas, ya que por defecto en la tabla de viajes se encuentra en estado programado

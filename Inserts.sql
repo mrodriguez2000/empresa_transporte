@@ -515,4 +515,13 @@ VALUES
     ('Angelina Timana', 'Femenino', '1992-03-10'),
     ('Luciana Rondon', 'Femenino', '1995-04-10'),
     ('Rosalba Rodriguez', 'Femenino', '2000-03-14'),
-    ('Francisco Enriquez', 'Masculino', '1989-11-10');
+    ('Francisco Enriquez', 'Masculino', '1989-11-10'),
+    ('Cecilia Moncayo', 'Femenino', '1993-03-01'),
+    ('Emilssen Beltran', 'Masculino', '2001-06-30'),
+    ('Alfredo Pulido', 'Masculino', '2003-05-10'),
+    ('Luis Amador', 'Masculino', '2003-11-10'),
+    ('Audrey Hurtado', 'Femenino', '2010-06-30'),
+    ('Francely Mosquera', 'Masculino', '2005-10-09'),
+    ('Gloria Londoño', 'Femenino', '2002-11-12'),
+    ('Alexander Rincon', 'Masculino', '2001-12-10'),
+    ('Judith Rosales', 'Femenino', '2001-12-29');
