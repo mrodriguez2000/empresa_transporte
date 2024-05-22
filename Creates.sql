@@ -29,7 +29,9 @@ CREATE TABLE
         CONSTRAINT FK_DEPARTAMENTO FOREIGN KEY (Departamento_ID) REFERENCES departamentos (Departamento_ID) ON DELETE CASCADE ON UPDATE CASCADE
     );
 
--- Se crean tablas de ciudad origen y ciudad destino, las cuales tienen como función alimentar la tabla de ruta, ya que en una empresa de viajes siempre hay una ciudad desde la que parte un bus hasta una ciudad de llegada o destino
+/* Se crean tablas de ciudad origen y ciudad destino, las cuales tienen como función alimentar la tabla 
+de ruta, ya que en una empresa de viajes siempre hay una ciudad desde la que parte un bus hasta una 
+ciudad de llegada o destino */
 CREATE TABLE ciudad_origen (
     Ciudad_Origen_ID INT PRIMARY KEY,
     Ciudad_Origen_Nombre VARCHAR(30),
@@ -76,7 +78,8 @@ CREATE TABLE
 CREATE TABLE
     marcas (
         Marca_ID INT AUTO_INCREMENT PRIMARY KEY,
-        Marca_Nombre VARCHAR(30) NOT NULL
+        Marca_Nombre VARCHAR(30) NOT NULL,
+        Imagen_Marca TEXT
     );
 
 -- Creación de la tabla de buses
@@ -97,9 +100,13 @@ CREATE TABLE
 CREATE TABLE viajes (
     Viaje_ID INT AUTO_INCREMENT PRIMARY KEY,
     Bus_ID INT NOT NULL,
+    Ruta_ID INT,
     Fecha_Programada_Viaje DATETIME NOT NULL,
     Estado_Viaje VARCHAR(30) DEFAULT 'Programado',
     CONSTRAINT FK_BUSES_VIAJES FOREIGN KEY(Bus_ID) REFERENCES buses(Bus_ID)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    CONSTRAINT FK_RUTAS_VIAJES FOREIGN KEY(Ruta_ID) REFERENCES rutas(Ruta_ID)
         ON DELETE CASCADE
         ON UPDATE CASCADE
 );
@@ -114,7 +121,8 @@ CREATE TABLE llegadas (
         ON UPDATE CASCADE
 );
 
--- En caso de que un viaje se reprograme bajo cualquier circunstancia se crea una tabla llamada viajes reprogramados
+/* En caso de que un viaje se reprograme bajo cualquier circunstancia se crea una tabla llamada viajes 
+reprogramados */
 CREATE TABLE Viajes_Reprogramados (
     Reprogramacion_ID INT AUTO_INCREMENT PRIMARY KEY,
     Viaje_ID INT,
@@ -126,7 +134,9 @@ CREATE TABLE Viajes_Reprogramados (
         ON UPDATE CASCADE
 );
 
--- Se va a crear una tabla que mantenga relaciones entre las tablas viajes y conductores, debido a que un viaje puede tener asignados varios conductores y varios conductores pueden estar asignados para un viaje
+/* Se va a crear una tabla que mantenga relaciones entre las tablas viajes y conductores, debido a que 
+un viaje puede tener asignados varios conductores y varios conductores pueden estar asignados para un 
+viaje */
 CREATE TABLE Viaje_Conductor (
     Registro_ID INT AUTO_INCREMENT PRIMARY KEY,
     Viaje_ID INT,
@@ -170,13 +180,14 @@ CREATE TABLE Metodo_Pago (
     Metodo_Pago_Nombre VARCHAR(30)
 );
 
--- Tabla que contiene información detallada del tiquete, como la información del viajero, el taquillero o trabajador que hizo el tiquete, el bus asignado para el viaje, la ruta, la fecha en la que se compra el tiquete y una fecha en la que está programado el viaje
+/* Tabla que contiene información detallada del tiquete, como la información del viajero, el taquillero 
+o trabajador que hizo el tiquete, el bus asignado para el viaje, la ruta, la fecha en la que se compra 
+el tiquete y una fecha en la que está programado el viaje */
 CREATE TABLE tiquete (
     Compra_ID INT AUTO_INCREMENT PRIMARY KEY,
     Viajero_ID INT,
     Taquillero_ID INT,
     Viaje_ID INT,
-    Ruta_ID INT,
     Metodo_Pago_ID INT,
     Valor_Tiquete INT,
     Aplica_Descuento BOOLEAN,
@@ -195,9 +206,6 @@ CREATE TABLE tiquete (
         ON DELETE CASCADE
         ON UPDATE CASCADE,
     CONSTRAINT FK_TAQUILLERO_TIQUETE FOREIGN KEY (Taquillero_ID) REFERENCES taquillero(Taquillero_ID)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE,
-    CONSTRAINT FK_RUTA_VIAJE_TIQUETE FOREIGN KEY (Ruta_ID) REFERENCES rutas(Ruta_Id)
         ON DELETE CASCADE
         ON UPDATE CASCADE,
     CONSTRAINT FK_METODO_DE_PAGO FOREIGN KEY (Metodo_Pago_ID) REFERENCES Metodo_Pago(Metodo_Pago_ID)

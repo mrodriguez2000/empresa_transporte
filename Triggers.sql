@@ -44,7 +44,8 @@ END
 	IF;
 END;
 
--- Trigger que inserta automaticamente registros en la tabla de conductores desvinculados antes de hacer la eliminación
+/* Trigger que inserta automaticamente registros en la tabla de conductores desvinculados antes de 
+hacer la eliminación */
 CREATE TRIGGER conductores_desvinculados BEFORE DELETE 
 ON conductores FOR EACH ROW 
 BEGIN 
@@ -69,13 +70,12 @@ BEGIN
 	    );
 END;
 
--- Trigger que actualiza registros en la tabla tiquete en caso de algún error, por ejemplo, si al ingresar un registro que no aplica descuento y se asigna un valor incorrecto, automaticamente el trigger actualizará el valor a 0.0 en Valor_Descuento
+/* Trigger que actualiza registros en la tabla tiquete en caso de algún error, por ejemplo, si al 
+ingresar un registro que no aplica descuento y se asigna un valor incorrecto, automaticamente el 
+trigger actualizará el valor a 0.0 en Valor_Descuento */
 CREATE TRIGGER descuentos_inconsistentes BEFORE INSERT ON tiquete FOR EACH ROW
 BEGIN
-	DECLARE Porcentaje_Descuento FLOAT;
 	DECLARE Aplica_Descuento BOOLEAN;
-
-	SET Porcentaje_Descuento = NEW.Valor_Descuento;
 	SET Aplica_Descuento = NEW.Aplica_Descuento;
 
 	IF Aplica_Descuento = FALSE THEN
@@ -83,7 +83,8 @@ BEGIN
 	END IF;
 END;
 
--- Trigger que cambia el estado de viaje a finalizado cuando se inserta un viaje en la tabla de llegadas, ya que por defecto en la tabla de viajes se encuentra en estado programado
+/* Trigger que cambia el estado de viaje a finalizado cuando se inserta un viaje en la tabla de 
+llegadas, ya que por defecto en la tabla de viajes se encuentra en estado programado */
 CREATE TRIGGER viajes_finalizados AFTER INSERT ON llegadas 
 FOR EACH ROW 
 BEGIN 
@@ -94,7 +95,8 @@ BEGIN
 	    viajes.`Viaje_ID` = NEW.`Viaje_ID`;
 END;
 
--- Creación de un trigger que inserta registros en una tabla (viajes_reprogramados) cuando se cambia la fecha del viaje. Esto ocurrirá después de un UPDATE en la tabla viajes
+/* Creación de un trigger que inserta registros en una tabla (viajes_reprogramados) cuando se cambia la 
+fecha del viaje. Esto ocurrirá después de un UPDATE en la tabla viajes */
 CREATE TRIGGER viajes_reprogramados AFTER UPDATE ON 
 viajes FOR EACH ROW 
 BEGIN 
@@ -124,7 +126,9 @@ END
 	IF;
 END;
 
--- El siguiente trigger consiste en actualizar el estado del viaje en la tabla viaje_conductor, por defecto se encontrará en estado programado, y una vez finalizado el viaje se va a cambiar a estado finalizado
+/* El siguiente trigger consiste en actualizar el estado del viaje en la tabla viaje_conductor, por 
+defecto se encontrará en estado programado, y una vez finalizado el viaje se va a cambiar a estado 
+finalizado */
 CREATE TRIGGER viaje_estado AFTER UPDATE ON viajes 
 FOR EACH ROW 
 BEGIN 
@@ -150,27 +154,34 @@ BEGIN
 	WHERE `Taquillero_ID` = NEW.`Taquillero_ID`;
 END;
 
--- Trigger que cambia el estado de un viaje reprogramado a finalizado en caso de que el viaje registrado bajo el Viaje_ID tenga registro de una llegada
+/* Trigger que cambia el estado de un viaje reprogramado a finalizado en caso de que el viaje 
+registrado bajo el Viaje_ID tenga registro de una llegada */
 CREATE TRIGGER viajes_reprogramados_actualizados AFTER UPDATE ON viajes FOR EACH ROW
 BEGIN
 	UPDATE viajes_reprogramados SET `Estado_Viaje` = 'Finalizado' WHERE `Viaje_ID` = NEW.`Viaje_ID`
 	AND NEW.`Estado_Viaje` = 'Finalizado';
 END;
 
--- Trigger que se encargue de sumar la cantidad de viajes asignados que tiene un bus. El proceso se ejecuta después de insertar un registro en la tabla de viajes
+/* Trigger que se encargue de sumar la cantidad de viajes asignados que tiene un bus. El proceso se 
+ejecuta después de insertar un registro en la tabla de viajes */
 CREATE TRIGGER viajes_asignados_buses AFTER INSERT ON viajes FOR EACH ROW
 BEGIN
 	UPDATE buses SET `Cantidad_Viajes_Asignados` = (SELECT COUNT(`Viaje_ID`) FROM viajes WHERE `Bus_ID` = NEW.`Bus_ID`)
 	WHERE `Bus_ID` = NEW.`Bus_ID`;
 END;
 
--- Trigger que se encargue de sumar la cantidad de viajes finalizados que tiene un bus. El proceso se ejecuta después de insertar un registro en la tabla de viajes, además, después de actualizada la información hará una resta entre la cantidad de viajes asignados y finalizados, con la finalidad de determinar la cantidad real de viajes que tiene pendientes o asignados
+/* Trigger que se encargue de sumar la cantidad de viajes finalizados que tiene un bus. El proceso se 
+ejecuta después de insertar un registro en la tabla de viajes, además, después de actualizada la 
+información hará una resta entre la cantidad de viajes asignados y finalizados, con la finalidad de 
+determinar la cantidad real de viajes que tiene pendientes o asignados */
 CREATE TRIGGER viajes_finalizados_buses AFTER UPDATE ON viajes FOR EACH ROW
 BEGIN
 	UPDATE buses SET `Cantidad_Viajes_Finalizados` = (SELECT COUNT(`Viaje_ID`) FROM viajes WHERE `Bus_ID` = NEW.`Bus_ID` AND `Estado_Viaje` = 'Finalizado') WHERE `Bus_ID` = NEW.`Bus_ID`;
 END;
 
--- Trigger que cuenta la cantidad de viajes finalizados que tuvo asignado un conductor. El proceso consiste en actualizar la cantidad de viajes que realizó un conductor después de que se actualicé la tabla de viaje_conductor
+/* Trigger que cuenta la cantidad de viajes finalizados que tuvo asignado un conductor. El proceso 
+consiste en actualizar la cantidad de viajes que realizó un conductor después de que se actualicé la 
+tabla de viaje_conductor */
 CREATE TRIGGER cantidad_viajes_realizados AFTER UPDATE ON viaje_conductor FOR EACH ROW
 BEGIN
 	UPDATE conductores SET `Cantidad_Viajes_Realizados` = (SELECT COUNT(`Conductor_ID`) FROM viaje_conductor WHERE `Estado_Viaje` = 'Finalizado' AND `Conductor_ID` = NEW.`Conductor_ID`)
@@ -183,7 +194,8 @@ BEGIN
 	WHERE `Conductor_ID` = NEW.`Conductor_ID`;
 END;
 
--- El presente trigger evitará que una fecha de compra de un determinado tiquete sea mayor que la fecha del viaje programado
+/* El presente trigger evitará que una fecha de compra de un determinado tiquete sea mayor que la fecha 
+del viaje programado */
 CREATE TRIGGER fecha_compra_tiquete BEFORE INSERT ON tiquete FOR EACH ROW
 BEGIN
 	DECLARE fecha_programada DATETIME;
@@ -191,4 +203,32 @@ BEGIN
 	IF NEW.Fecha_Compra > fecha_programada THEN SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Error de información, la fecha de compra es mayor que la fecha de viaje programada.';
     END IF;	
+END;
+
+/* Trigger que evita ingresar una fecha de llegada menor a una fecha programada de dicho viaje, 
+es decir, si un viaje está programado para el 2024-05-20 17:00 no puede registrar una fecha de llegada
+de 2024-05-20 16:00 */ 
+CREATE TRIGGER fecha_llegada BEFORE INSERT ON llegadas FOR EACH ROW
+BEGIN
+	DECLARE fecha_programada DATETIME;
+	SELECT v.`Fecha_Programada_Viaje` INTO fecha_programada FROM viajes v WHERE NEW.`Viaje_ID` = v.`Viaje_ID`;
+	IF NEW.Fecha_Llegada < fecha_programada THEN SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Error de información, la fecha de llegada no puede ser menor que la fecha de viaje programada.';
+    END IF;	 
+END;
+
+/*El presente trigger tiene como finalidad evitar que la cantidad de pasajeros en un viaje sea mayor
+que la capacidad que tiene un bus de llevar pasajeros, por ejemplo, si un bus tiene una capacidad de
+llevar 34 pasajeros el trigger evitará que se haga una compra de un pasajero #35 y se debe tener en
+cuenta que el viaje no debe estar finalizado. */
+CREATE TRIGGER capacidad_buses BEFORE INSERT ON tiquete FOR EACH ROW
+BEGIN
+	DECLARE capacidad_buses INT;
+	DECLARE cantidad_pasajeros INT;
+	SELECT b.`Capacidad_Pasajeros` INTO capacidad_buses FROM buses b INNER JOIN viajes v ON b.`Bus_ID` = v.`Viaje_ID` WHERE v.`Estado_Viaje` = 'Programado';
+	SELECT COUNT(t.`Compra_ID`) INTO cantidad_pasajeros FROM tiquete t;
+
+	IF cantidad_pasajeros > capacidad_buses THEN SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'No hay cupos disponibles en el viaje.';
+    END IF;
 END;

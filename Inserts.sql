@@ -70,8 +70,8 @@ VALUES
     ('Bucaramanga', 27),
     ('Cali', 30);
 
--- Insertando registros en la ciudad de origen
--- El query consiste en insertar los registros de la tabla ciudades en la tabla ciudad origen mediante un select
+/* Insertando registros en la ciudad de origen
+El query consiste en insertar los registros de la tabla ciudades en la tabla ciudad origen mediante un select */
 INSERT INTO
     ciudad_origen (`Ciudad_Origen_ID`, `Ciudad_Origen_Nombre`)
 SELECT
@@ -80,7 +80,8 @@ SELECT
 FROM
     ciudades;
 
--- Mismo proceso que el documentado anteriormente, con la única diferencia en que se van a ingresar registros a la tabla ciudad destino
+/* Mismo proceso que el documentado anteriormente, con la única diferencia en que se van a ingresar 
+registros a la tabla ciudad destino */
 INSERT INTO
     ciudad_destino (`Ciudad_Destino_ID`, `Ciudad_Destino_Nombre`)
 SELECT
@@ -236,28 +237,20 @@ VALUES
 
 
 INSERT INTO
-    marcas (Marca_Nombre)
+    marcas (`Marca_Nombre`, `Imagen_Marca`)
 VALUES
-    ('Karsan'),
-    ('Mercedes-Benz'),
-    ('Foton'),
-    ('Hyundai'),
-    ('Scania'),
-    ('Volvo Buses'),
-    ('MAN'),
-    ('Iveco'),
-    ('Solaris'),
-    ('Van Hool'),
-    ('Neoplan'),
-    ('Marcopolo'),
-    ('Irizar'),
-    ('Alexander Dennis'),
-    ('Yutong'),
-    ('Higer'),
-    ('King Long'),
-    ('Anadolu Isuzu'),
-    ('Ashok Leyland'),
-    ('Temsa');
+    ('Mercedes-Benz', 'https://c0.klipartz.com/pngpicture/160/763/gratis-png-logo-mercedes-benz.png'),
+    ('Foton', 'https://logos-world.net/wp-content/uploads/2022/12/Foton-Motor-Logo.png'),
+    ('Hyundai', 'https://e7.pngegg.com/pngimages/129/76/png-clipart-hyundai-logo-car-hyundai-motor-company-honda-logo-hyundai-i30-beijing-modern-icon-material-angle-emblem.png'),
+    ('Scania', 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/SCANIA_Logo_vector.svg/2560px-SCANIA_Logo_vector.svg.png'),
+    ('Volvo Buses', 'https://hips.hearstapps.com/hmg-prod/images/volvo-nuevo-logo-2023-1632412589.jpg'),
+    ('MAN', 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Logo_MAN.png/320px-Logo_MAN.png'),
+    ('Iveco', 'https://brandemia.org/contenido/subidas/2023/10/portada-iveco-2-1200x670.jpg'),
+    ('Solaris', 'https://upload.wikimedia.org/wikipedia/commons/8/89/Solaris_logo.jpg'),
+    ('Marcopolo', 'https://seeklogo.com/images/M/marcopolo-logo-1A5FFDFFA5-seeklogo.com.png'),
+    ('Yutong', 'https://upload.wikimedia.org/wikipedia/commons/6/64/Yutong_Bus_and_Coach_Logo.jpg'),
+    ('Higer', 'https://www.carlogos.org/car-logos/higer-logo-800x600.png'),
+    ('Temsa', 'https://download.logo.wine/logo/TEMSA/TEMSA-Logo.wine.png');
 
 INSERT INTO
     buses (
@@ -271,37 +264,37 @@ VALUES
     (34, 3, 5),
     (36, 12, 6),
     (32, 11, 6),
-    (36, 5, 9),
+    (36, 1, 9),
     (36, 6, 3),
-    (30, 10, 3),
+    (30, 2, 3),
     (36, 12, 16),
-    (30, 17, 13),
+    (30, 1, 13),
     (36, 7, 23),
     (36, 9, 23),
     (36, 6, 23),
     (30, 4, 24),
     (36, 3, 24),
-    (36, 15, 7),
-    (32, 11, 4),
-    (36, 20, 12),
-    (36, 10, 12),
+    (36, 1, 7),
+    (32, 6, 4),
+    (36, 2, 12),
+    (36, 3, 12),
     (36, 6, 17),
     (36, 9, 17),
     (30, 1, 17),
-    (36, 14, 17),
+    (36, 1, 17),
     (36, 6, 17),
     (36, 7, 17),
     (32, 6, 17),
     (36, 9, 17),
     (36, 2, 20),
     (36, 12, 6),
-    (36, 13, 20),
+    (36, 8, 20),
     (32, 3, 30),
     (36, 3, 31),
     (38, 10, 31),
     (36, 12, 31),
-    (40, 20, 25),
-    (38, 15, 26),
+    (40, 8, 25),
+    (38, 6, 26),
     (40, 6, 31),
     (36, 2, 31),
     (36, 6, 31),
@@ -311,14 +304,14 @@ VALUES
     (36, 12, 6),
     (36, 10, 5),
     (34, 4, 5),
-    (36, 13, 7),
+    (36, 1, 7),
     (36, 3, 7),
     (38, 9, 7),
     (40, 11, 17),
     (36, 7, 18),
     (36, 11, 18),
     (36, 6, 18),
-    (36, 13, 5),
+    (36, 1, 5),
     (36, 12, 4),
     (36, 6, 20),
     (36, 12, 4),
@@ -524,4 +517,13 @@ VALUES
     ('Francely Mosquera', 'Masculino', '2005-10-09'),
     ('Gloria Londoño', 'Femenino', '2002-11-12'),
     ('Alexander Rincon', 'Masculino', '2001-12-10'),
-    ('Judith Rosales', 'Femenino', '2001-12-29');
+    ('Judith Rosales', 'Femenino', '2001-12-29'),
+    ('Marcela Montreal', 'Femenino', '2000-03-10'),
+    ('Teresa Hurtado', 'Femenino', '2000-10-30'),
+    ('Madelyn Becerra', 'Femenino', '1998-11-30'),
+    ('Cecilia Andrade', 'Femenino', '2000-10-03'),
+    ('Lucia Montes', 'Femenino', '2000-10-30'),
+    ('Rolando Guzman', 'Masculino', '1998-06-30'),
+    ('Alfonso Salazar', 'Masculino', '1992-04-30'),
+    ('Edith Gonzales', 'Femenino', '1993-06-30'),
+    ('Silvio Muñoz', 'Masculino', '1992-06-15');
