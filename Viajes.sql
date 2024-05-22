@@ -136,10 +136,8 @@ VALUES
 */
 
 INSERT INTO tiquete
-(`Viajero_ID`, `Taquillero_ID`, `Viaje_ID`, `Metodo_Pago_ID`, `Valor_Tiquete`, `Aplica_Descuento`, `Valor_Descuento`, `Fecha_Compra`)
+    (`Viajero_ID`, `Taquillero_ID`, `Viaje_ID`, `Metodo_Pago_ID`, `Valor_Tiquete`, `Aplica_Descuento`, `Valor_Descuento`, `Fecha_Compra`)
 VALUES
-
-
 
 
 SELECT v.`Viaje_ID`, b.`Capacidad_Pasajeros`, COUNT(t.`Compra_ID`) AS cantidad_pasajeros FROM viajes v INNER JOIN tiquete t ON t.`Viaje_ID` = v.`Viaje_ID` INNER JOIN buses b ON b.`Bus_ID` = v.`Bus_ID` GROUP BY v.`Viaje_ID`, b.`Capacidad_Pasajeros`;

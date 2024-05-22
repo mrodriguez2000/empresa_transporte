@@ -217,7 +217,7 @@ BEGIN
     END IF;	 
 END;
 
-/*El presente trigger tiene como finalidad evitar que la cantidad de pasajeros en un viaje sea mayor
+/* El presente trigger tiene como finalidad evitar que la cantidad de pasajeros en un viaje sea mayor
 que la capacidad que tiene un bus de llevar pasajeros, por ejemplo, si un bus tiene una capacidad de
 llevar 34 pasajeros el trigger evitará que se haga una compra de un pasajero #35 y se debe tener en
 cuenta que el viaje no debe estar finalizado. */
@@ -225,10 +225,23 @@ CREATE TRIGGER capacidad_buses BEFORE INSERT ON tiquete FOR EACH ROW
 BEGIN
 	DECLARE capacidad_buses INT;
 	DECLARE cantidad_pasajeros INT;
-	SELECT b.`Capacidad_Pasajeros` INTO capacidad_buses FROM buses b INNER JOIN viajes v ON b.`Bus_ID` = v.`Viaje_ID` WHERE v.`Estado_Viaje` = 'Programado';
-	SELECT COUNT(t.`Compra_ID`) INTO cantidad_pasajeros FROM tiquete t;
+	DECLARE estado_viaje VARCHAR(30);
+	
+	SELECT b.Capacidad_Pasajeros
+    INTO capacidad_buses
+    FROM buses b
+    JOIN viajes v ON v.Bus_ID = b.Bus_ID
+    WHERE v.Viaje_ID = NEW.Viaje_ID AND v.`Estado_Viaje` = 'Programado';
 
-	IF cantidad_pasajeros > capacidad_buses THEN SIGNAL SQLSTATE '45000'
+
+	SELECT COUNT(*)
+    INTO cantidad_pasajeros
+    FROM tiquete t
+    WHERE t.Viaje_ID = NEW.Viaje_ID;
+
+
+	IF cantidad_pasajeros = capacidad_buses 
+	THEN SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'No hay cupos disponibles en el viaje.';
     END IF;
 END;
