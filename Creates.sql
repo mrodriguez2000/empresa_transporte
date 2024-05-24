@@ -34,18 +34,12 @@ de ruta, ya que en una empresa de viajes siempre hay una ciudad desde la que par
 ciudad de llegada o destino */
 CREATE TABLE ciudad_origen (
     Ciudad_Origen_ID INT PRIMARY KEY,
-    Ciudad_Origen_Nombre VARCHAR(30),
-    CONSTRAINT FK_CIUDAD_ORIGEN FOREIGN KEY(Ciudad_Origen_ID) REFERENCES ciudades(Ciudad_ID)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE
+    Ciudad_Origen_Nombre VARCHAR(30)
 );
 
 CREATE TABLE ciudad_destino (
     Ciudad_Destino_ID INT PRIMARY KEY,
-    Ciudad_Destino_Nombre VARCHAR(30),
-    CONSTRAINT FK_CIUDAD_DESTINO FOREIGN KEY(Ciudad_Destino_ID) REFERENCES ciudades(Ciudad_ID)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE
+    Ciudad_Destino_Nombre VARCHAR(30)
 );
 
 -- Creación de tabla de rutas
@@ -89,6 +83,7 @@ CREATE TABLE
         Capacidad_Pasajeros INT,
         Marca_ID INT NOT NULL,
         Municipio_Matricula_ID INT,
+        Fecha_Matricula DATE,
         Cantidad_Viajes_Asignados INT DEFAULT 0,
         Cantidad_Viajes_Finalizados INT DEFAULT 0,
         Cantidad_Viajes_Pendientes INT AS (Cantidad_Viajes_Asignados - Cantidad_Viajes_Finalizados),
@@ -121,6 +116,11 @@ CREATE TABLE llegadas (
         ON UPDATE CASCADE
 );
 
+CREATE TABLE Motivos_Reprogramacion (
+    Motivo_ID INT AUTO_INCREMENT PRIMARY KEY,
+    Motivo_Descripcion VARCHAR(30) NOT NULL
+)
+
 /* En caso de que un viaje se reprograme bajo cualquier circunstancia se crea una tabla llamada viajes 
 reprogramados */
 CREATE TABLE Viajes_Reprogramados (
@@ -129,7 +129,11 @@ CREATE TABLE Viajes_Reprogramados (
     Fecha_Programada_Viaje_Inicial DATETIME, -- Primera fecha en la que se programó el viaje
     Fecha_Programada_Viaje_Nueva DATETIME, -- Nueva fecha en la que se programa el viaje
     Estado_Viaje VARCHAR(30) DEFAULT 'Reprogramado',
+    Motivo_ID INT DEFAULT 1,
     CONSTRAINT FK_VIAJE_REPROGRAMADO FOREIGN KEY (Viaje_ID) REFERENCES viajes(Viaje_ID)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    CONSTRAINT FK_MOTIVO_REPROGRAMACION FOREIGN KEY (Motivo_ID) REFERENCES Motivos_Reprogramacion(Motivo_ID)
         ON DELETE CASCADE
         ON UPDATE CASCADE
 );
